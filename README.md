@@ -1,8 +1,28 @@
-# React + Vite
+# Netflix GPT
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+```
+    A similar site to Netflix where can sea
+```
 
-Currently, two official plugins are available:
+## Technologies used
+```
+  React + vite
+  Tailwind css
+  Firebase
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Clone project
+```
+    git clone https://github.com/agigibairene/Netflix-gpt.git
+    cd Netflix-gpt
+```
+
+### Install dependencies
+```
+    npm install
+```
+
+### Run application
+```
+    npm run dev
+```
