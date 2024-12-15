@@ -5,12 +5,12 @@ A similar site to Netflix (Netflix + GPT) that utilizes the ChatGPT API to help 
 
 ## Technologies used
 ```
-####1. Frontend: 
-       a. React + vite
-       b. Tailwind css (A CSS framework for styling)
-####2. Backend: 
-       a.  ChatGPT API (For user queries and recommending matching movies searched)
-        b. Firebase (For Authentication)
+    1. Frontend: 
+       - React + vite
+       - Tailwind css (A CSS framework for styling)
+    2. Backend: 
+       -  ChatGPT API (For user queries and recommending matching movies searched)
+       - Firebase (For Authentication)
 ```
 
 # Clone project
