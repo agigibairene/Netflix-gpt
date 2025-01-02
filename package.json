@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^11.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -19,7 +20,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.15.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
@@ -27,5 +28,9 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
     "vite": "^6.0.1"
-  }
+  },
+  "description": "A similar site to Netflix (Netflix + GPT) that utilizes the ChatGPT API to help users discover movies. Users can describe what they want to watch (e.g., \"I want to watch a Christmas anime\" or \"A cartoon similar to Encanto\"), and the app provides tailored movie recommendations based on their input.",
+  "main": "eslint.config.js",
+  "author": "",
+  "license": "ISC"
 }

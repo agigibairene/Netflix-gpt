@@ -39,7 +39,7 @@ export default function Login() {
 
             {/* Form */}
             <div className="absolute inset-0 flex items-center justify-center z-10">
-                <form onSubmit={handleSubmit} className="w-11/12 max-w-md rounded-lg bg-black/80 text-white py-8 px-8 shadow-lg flex flex-col">
+                <form onSubmit={handleSubmit} className="w-11/12 max-w-md rounded-lg bg-black/80 text-white py-8 px-14 shadow-lg flex flex-col">
                     <h2 className="font-bold text-3xl text-center mb-6">{haveAccount ? "Sign In" : "Sign Up"}</h2>
 
                     {!haveAccount && (
@@ -80,7 +80,7 @@ export default function Login() {
                     <p className="my-4 text-gray-300 text-sm text-center">
                         {haveAccount ? "New to Netflix? " : "Already have an account? "}
                         <span className="font-bold text-white cursor-pointer">
-                            <Link onClick={() => setHaveAccount(!haveAccount)}>
+                            <Link onClick={() => {setErrors({}); setHaveAccount(!haveAccount)}}>
                                 Sign {haveAccount ? "Up" : "In"} now.
                             </Link>
                         </span>
@@ -90,4 +90,3 @@ export default function Login() {
         </div>
     );
 }
-2
