@@ -28,7 +28,7 @@
     "globals": "^15.12.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
-    "vite": "^6.0.1"
+    "vite": "^6.0.6"
   },
   "description": "A similar site to Netflix (Netflix + GPT) that utilizes the ChatGPT API to help users discover movies. Users can describe what they want to watch (e.g., \"I want to watch a Christmas anime\" or \"A cartoon similar to Encanto\"), and the app provides tailored movie recommendations based on their input.",
   "main": "eslint.config.js",
