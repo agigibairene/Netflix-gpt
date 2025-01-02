@@ -3,7 +3,7 @@
 A similar site to Netflix (Netflix + GPT) that utilizes the ChatGPT API to help users discover movies. Users can describe what they want to watch (e.g., "I want to watch a Christmas anime" or "A cartoon similar to Encanto"), and the app provides tailored movie recommendations based on their input.
 
 ```
-visit web app here [https://netflix-gpt-seven-smoky.vercel.app/](https://netflix-gpt-seven-smoky.vercel.app/)
+Check out live Demo [Netflix GPT](https://netflix-gpt-seven-smoky.vercel.app/)
 ```
 
 ## Technologies used
