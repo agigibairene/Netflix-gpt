@@ -4,6 +4,8 @@ import background from "/background-img.jpg";
 import Input from "../Utils/Input";
 import { useState } from "react";
 import checkValidData from "../Utils/validate.js";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Utils/firebase.js";
 
 export default function Login() {
     const [haveAccount, setHaveAccount] = useState(false);
@@ -13,20 +15,44 @@ export default function Login() {
     function handleUserInput(event) {
         const { name, value } = event.target;
         setUserInput(prevData => ({ ...prevData, [name]: value }));
+        // Reset specific error when input changes
+        setErrors(prevErrors => ({ ...prevErrors, [name]: "" }));
     }
 
     function validateInputs() {
         const { emailRegex, passwordRegex, fullNameRegex } = checkValidData(userInput.email, userInput.password, userInput.username);
-        setErrors({
+        const newErrors = {
             email: emailRegex ? "" : "Invalid email format.",
-            password: passwordRegex ? "" : "Password must be at least 8 characters, include an uppercase letter, a number, and a special character.",
+            password: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
             username: fullNameRegex || haveAccount ? "" : "Full Name is required for Sign Up."
-        });
+        };
+        setErrors(newErrors);
+        return Object.values(newErrors).every(error => error === "");
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        validateInputs();
+        
+        if (validateInputs()) {
+            try {
+                if (haveAccount) {
+                    // LOGIN
+                    const userCredential = await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
+                    console.log("Login successful:", userCredential.user);
+                    // Redirect or show success message here
+                } else {
+                    // SIGN UP
+                    const userCredential = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
+                    console.log("Sign Up successful:", userCredential.user);
+                    // Clear input fields after successful sign-up
+                    setUserInput({ username: "", email: "", password: "" });
+                    // Redirect or show success message here
+                }
+            } catch (error) {
+                const errorMessage = error.message;
+                setErrors({ general: errorMessage });
+            }
+        }
     }
 
     return (
@@ -70,6 +96,10 @@ export default function Login() {
                         onChange={handleUserInput}
                     />
                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                    
+                    {/* General error message */}
+                    {errors.general && <p className="text-red-500 text-sm">{errors.general}</p>}
+
                     <button
                         className="bg-red-800 mt-4 w-full p-3 rounded hover:bg-red-700 transition font-bold"
                         type="submit"
@@ -80,7 +110,7 @@ export default function Login() {
                     <p className="my-4 text-gray-300 text-sm text-center">
                         {haveAccount ? "New to Netflix? " : "Already have an account? "}
                         <span className="font-bold text-white cursor-pointer">
-                            <Link onClick={() => {setErrors({}); setHaveAccount(!haveAccount)}}>
+                            <Link onClick={() => { setErrors({}); setHaveAccount(!haveAccount); }}>
                                 Sign {haveAccount ? "Up" : "In"} now.
                             </Link>
                         </span>
