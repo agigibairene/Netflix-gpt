@@ -15,7 +15,6 @@ export default function Login() {
     function handleUserInput(event) {
         const { name, value } = event.target;
         setUserInput(prevData => ({ ...prevData, [name]: value }));
-        // Reset specific error when input changes
         setErrors(prevErrors => ({ ...prevErrors, [name]: "" }));
     }
 
@@ -39,7 +38,6 @@ export default function Login() {
                     // LOGIN
                     const userCredential = await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
                     console.log("Login successful:", userCredential.user);
-                    // Redirect or show success message here
                 } else {
                     // SIGN UP
                     const userCredential = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
