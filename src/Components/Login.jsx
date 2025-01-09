@@ -1,16 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import background from "/background-img.jpg";
 import Input from "../Utils/Input";
 import { useState } from "react";
 import checkValidData from "../Utils/validate.js";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../Utils/firebase.js";
 
 export default function Login() {
     const [haveAccount, setHaveAccount] = useState(false);
     const [userInput, setUserInput] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     function handleUserInput(event) {
         const { name, value } = event.target;
@@ -37,18 +38,27 @@ export default function Login() {
                 if (haveAccount) {
                     // LOGIN
                     const userCredential = await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
-                    console.log("Login successful:", userCredential.user);
+                    console.log("Login successful:", userCredential.user);                   
+                    navigate("/browse");
                 } else {
                     // SIGN UP
                     const userCredential = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
                     console.log("Sign Up successful:", userCredential.user);
-                    // Clear input fields after successful sign-up
+                    await updateProfile(auth.currentUser, {
+                        displayName: userInput.username
+                    });
                     setUserInput({ username: "", email: "", password: "" });
-                    // Redirect or show success message here
+                    navigate("/browse");
+                   
                 }
             } catch (error) {
                 const errorMessage = error.message;
-                setErrors({ general: errorMessage });
+                setErrors({ general: errorMessage === "auth/email-already-in-use"
+                    ? "Email is already in use."
+                    : errorMessage === "auth/wrong-password"
+                    ? "Invalid password."
+                    : "An unexpected error occurred."
+                });
             }
         }
     }

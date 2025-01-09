@@ -27,3 +27,4 @@ build
 .firebase
 .github
 .firebaserc
+.vercel

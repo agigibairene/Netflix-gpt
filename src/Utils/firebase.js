@@ -5,14 +5,13 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: "netflix-gpt-f57bb.firebaseapp.com",
-  projectId: "netflix-gpt-f57bb",
-  storageBucket: "netflix-gpt-f57bb.firebasestorage.app",
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APPID
+  appId: import.meta.env.VITE_APPID,
 };
 
 // Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
-export default firebase
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth();

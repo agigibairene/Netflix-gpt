@@ -3,7 +3,9 @@ import userReducer from "./userSlice";
 
 
 const netflixStore = configureStore({
-    reducer: {userReducer}
+    reducer: {
+        user: userReducer
+    }
 });
 
 export default netflixStore;
