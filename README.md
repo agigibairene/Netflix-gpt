@@ -1,11 +1,11 @@
-# Netflix GPT
+# 📌 Netflix GPT
 
 A similar site to Netflix (Netflix + GPT) that utilizes the ChatGPT API to help users discover movies. Users can describe what they want to watch (e.g., "I want to watch a Christmas anime" or "A cartoon similar to Encanto"), and the app provides tailored movie recommendations based on their input.
 
 
-## Live Demo
+## 📌 Live Demo
 
-Check out live Demo [Netflix GPT](https://netflix-gpt-seven-smoky.vercel.app/)
+👉 Check out live Demo [Netflix GPT](https://netflix-gpt-seven-smoky.vercel.app/)
 
 
 ## Technologies used
@@ -18,7 +18,7 @@ Check out live Demo [Netflix GPT](https://netflix-gpt-seven-smoky.vercel.app/)
        - Firebase (For Authentication)
 ```
 
-# Clone project
+# 📌 Clone project
 ```
     git clone https://github.com/agigibairene/Netflix-gpt.git
     cd Netflix-gpt
