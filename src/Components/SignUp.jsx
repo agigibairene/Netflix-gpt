@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Input from "../utils/Input";
+import Input from "../Utils/Input";
 import { Link } from "react-router";
-import checkValidData from "../utils/validate";
+import checkValidData from "../Utils/Validate.jsx";
+
 export default function Login(){
     const [userInput, setUserInput] = useState({
         username: "",
