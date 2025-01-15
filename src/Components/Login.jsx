@@ -1,130 +1,63 @@
-import { Link, useNavigate } from "react-router-dom";
-import Header from "./Header";
-import background from "/background-img.jpg";
-import Input from "../Utils/Input";
 import { useState } from "react";
-import checkValidData from "../Utils/validate.js";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../Utils/firebase.js";
+import Input from "../utils/Input";
+import { Link } from "react-router";
+import checkValidData from "../utils/validate";
+export default function Login(){
+    const [userInput, setUserInput] = useState({
+        email: "",
+        password: "",
+    });
 
-export default function Login() {
-    const [haveAccount, setHaveAccount] = useState(false);
-    const [userInput, setUserInput] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
 
-    function handleUserInput(event) {
-        const { name, value } = event.target;
-        setUserInput(prevData => ({ ...prevData, [name]: value }));
-        setErrors(prevErrors => ({ ...prevErrors, [name]: "" }));
+    function handleUserInput(event){
+        const {value, name} = event.target;
+
+        setUserInput(prevInput => ({
+            ...prevInput,
+            [name]: value
+        }))
     }
 
-    function validateInputs() {
-        const { emailRegex, passwordRegex, fullNameRegex } = checkValidData(userInput.email, userInput.password, userInput.username);
-        const newErrors = {
-            email: emailRegex ? "" : "Invalid email format.",
-            password: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
-            username: fullNameRegex || haveAccount ? "" : "Full Name is required for Sign Up."
-        };
-        setErrors(newErrors);
-        return Object.values(newErrors).every(error => error === "");
-    }
-
-    async function handleSubmit(event) {
-        event.preventDefault();
+    function checkValidations(){
+        const {emailRegex, passwordRegex} = checkValidData(userInput.email, userInput.password);
         
-        if (validateInputs()) {
-            try {
-                if (haveAccount) {
-                    // LOGIN
-                    const userCredential = await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
-                    console.log("Login successful:", userCredential.user);                   
-                    navigate("/browse");
-                } else {
-                    // SIGN UP
-                    const userCredential = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
-                    console.log("Sign Up successful:", userCredential.user);
-                    await updateProfile(auth.currentUser, {
-                        displayName: userInput.username
-                    });
-                    setUserInput({ username: "", email: "", password: "" });
-                    navigate("/browse");
-                   
-                }
-            } catch (error) {
-                const errorMessage = error.message;
-                setErrors({ general: errorMessage === "auth/email-already-in-use"
-                    ? "Email is already in use."
-                    : errorMessage === "auth/wrong-password"
-                    ? "Invalid password."
-                    : "An unexpected error occurred."
-                });
-            }
+        const userErrs = {
+            emailError: emailRegex ? "" : "Enter a valid email address",
+            passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
         }
+
+        setErrors(userErrs)
+
+        return Object.values(userErrs).every(error => error === "");
+
     }
 
-    return (
-        <div className="relative">
-            <Header />
-            {/* Background */}
-            <div className="h-screen bg-cover bg-fixed" style={{ backgroundImage: `url(${background})` }}>
-                <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+    function handleSubmit(event){
+        event.preventDefault();
+        checkValidations();
+    }
+
+    console.log(userInput)
+
+
+    return(
+        <form onSubmit={handleSubmit} className="bg-black bg-opacity-80 shadow-lg text-white w-[26rem] mx-auto px-12 py-4 rounded">
+            <h1 className="font-bold text-3xl mb-6 mt-2">Sign In</h1>
+            <Input value={userInput.email} placeholder="Email address" name="email" onChange={handleUserInput} type="text"/>
+            {errors.emailError && <p className="text-netflix-color">{errors.emailError}</p> }
+
+
+            <Input value={userInput.password} placeholder="Password" name="password" onChange={handleUserInput} type="password"/>
+            {errors.passwordErr && <p className="text-netflix-color">{errors.passwordErr}</p> }
+
+
+            <button className="w-full bg-netflix-color text-white my-9 px-4 py-3 font-semibold text-lg rounded-sm">Sign In</button>
+
+            <div className="flex mb-3">
+                <p>New to Netflix?</p>
+                <Link to="/signup" className="ml-2 font-bold">Sign up now</Link>
             </div>
-
-            {/* Form */}
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-                <form onSubmit={handleSubmit} className="w-11/12 max-w-md rounded-lg bg-black/80 text-white py-8 px-14 shadow-lg flex flex-col">
-                    <h2 className="font-bold text-3xl text-center mb-6">{haveAccount ? "Sign In" : "Sign Up"}</h2>
-
-                    {!haveAccount && (
-                        <>
-                            <Input
-                                name="username"
-                                placeholder="Full Name"
-                                type="text"
-                                value={userInput.username}
-                                onChange={handleUserInput}
-                            />
-                            {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
-                        </>
-                    )}
-                    <Input
-                        type="text"
-                        name="email"
-                        value={userInput.email}
-                        onChange={handleUserInput}
-                        placeholder="Email Address"
-                    />
-                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                    <Input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={userInput.password}
-                        onChange={handleUserInput}
-                    />
-                    {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-                    
-                    {/* General error message */}
-                    {errors.general && <p className="text-red-500 text-sm">{errors.general}</p>}
-
-                    <button
-                        className="bg-red-800 mt-4 w-full p-3 rounded hover:bg-red-700 transition font-bold"
-                        type="submit"
-                    >
-                        {haveAccount ? "Sign In" : "Sign Up"}
-                    </button>
-
-                    <p className="my-4 text-gray-300 text-sm text-center">
-                        {haveAccount ? "New to Netflix? " : "Already have an account? "}
-                        <span className="font-bold text-white cursor-pointer">
-                            <Link onClick={() => { setErrors({}); setHaveAccount(!haveAccount); }}>
-                                Sign {haveAccount ? "Up" : "In"} now.
-                            </Link>
-                        </span>
-                    </p>
-                </form>
-            </div>
-        </div>
-    );
+        </form>
+    )
 }

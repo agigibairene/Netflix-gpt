@@ -1,14 +1,14 @@
-import { Provider } from "react-redux";
-import Main from "./Components/Main";
-import netflixStore from "./store/Redux_store"
+import Body from "./Components/Body"
 
 
-export default function App(){
-  return(
+function App() {
+
+  return (
     <>
-      <Provider store={netflixStore}>
-        <Main />
-      </Provider>
+      <Body />
     </>
+    
   )
 }
+
+export default App

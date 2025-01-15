@@ -5,7 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "netflix-color": "#E50914",
+      },
+      backgroundImage: {
+        "bgImage": 'url("/background-img.jpg")'
+      }
+    },
   },
   plugins: [],
 }
