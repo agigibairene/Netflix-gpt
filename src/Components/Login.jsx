@@ -2,6 +2,8 @@ import { useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
 import checkValidData from "../Utils/Validate.jsx";
+import { auth } from "../Utils/firebase.js";
+
 export default function Login(){
     const [userInput, setUserInput] = useState({
         email: "",
@@ -35,7 +37,7 @@ export default function Login(){
 
     function handleSubmit(event){
         event.preventDefault();
-        checkValidations();
+       const isValid = checkValidations()
     }
 
     console.log(userInput)

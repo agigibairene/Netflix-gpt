@@ -2,6 +2,9 @@ import { useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
 import checkValidData from "../Utils/Validate.jsx";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../Utils/firebase.js";
+import { setDoc, doc } from "firebase/firestore";
 
 export default function Login(){
     const [userInput, setUserInput] = useState({
@@ -36,9 +39,31 @@ export default function Login(){
 
     }
 
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault();
-        checkValidations();
+        const isValid = checkValidations();
+        try{
+           if (isValid){
+                const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
+                const user = userCredentials.user;
+                console.log(user.uid);
+                console.log("User successfully created");
+                try{
+                    if (user && user.email && userInput.username){
+                        await setDoc(doc(db, "Users", user.uid), {
+                            email: user.email,
+                            username: userInput.username,
+                        });
+                    }
+                }
+                catch (err) {
+                    console.log(err.mess)
+                }
+            }
+        }
+        catch(e){
+            console.log(e.message)
+        }
     }
 
     return(
@@ -55,7 +80,7 @@ export default function Login(){
             <Input value={userInput.password} placeholder="Password" name="password" onChange={handleUserInput} type="password"/>
             {errors.passwordErr && <p className="text-netflix-color">{errors.passwordErr}</p> }
 
-            <button className="w-full bg-netflix-color text-white my-6 px-4 py-3 font-semibold text-lg rounded-sm">Sign up</button>
+            <button className="w-full bg-netflix-color text-white my-6 px-4 py-3 font-semibold text-lg rounded-sm outline-none">Sign up</button>
 
             <div className="flex mb-3">
                 <p>Already have an account?</p>
