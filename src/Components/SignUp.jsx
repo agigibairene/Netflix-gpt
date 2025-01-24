@@ -1,19 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
-import checkValidData from "../Utils/Validate.jsx";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../Utils/firebase.js";
-import { setDoc, doc } from "firebase/firestore";
+import { loginContext } from "../Context/UserContext";
 
-export default function Login(){
+export default function SignUp(){
     const [userInput, setUserInput] = useState({
         username: "",
         email: "",
         password: "",
     });
 
-    const [errors, setErrors] = useState({});
+    const {handleSignUp, errors} = useContext(loginContext);
 
     function handleUserInput(event){
         const {value, name} = event.target;
@@ -23,51 +20,10 @@ export default function Login(){
             [name]: value
         }))
     }
-
-    function checkValidations(){
-        const {emailRegex, passwordRegex, nameRegex} = checkValidData(userInput.email, userInput.password, userInput.username);
-        
-        const userErrs = {
-            nameError: nameRegex ? "" : "Enter a valid username",
-            emailError: emailRegex ? "" : "Enter a valid email address",
-            passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
-        }
-
-        setErrors(userErrs)
-
-        return Object.values(userErrs).every(error => error === "");
-
-    }
-
-    async function handleSubmit(event){
-        event.preventDefault();
-        const isValid = checkValidations();
-        try{
-           if (isValid){
-                const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
-                const user = userCredentials.user;
-                console.log(user.uid);
-                console.log("User successfully created");
-                try{
-                    if (user && user.email && userInput.username){
-                        await setDoc(doc(db, "Users", user.uid), {
-                            email: user.email,
-                            username: userInput.username,
-                        });
-                    }
-                }
-                catch (err) {
-                    console.log(err.mess)
-                }
-            }
-        }
-        catch(e){
-            console.log(e.message)
-        }
-    }
+    
 
     return(
-        <form onSubmit={handleSubmit} className="bg-black bg-opacity-80 shadow-lg text-white w-[26rem] mx-auto px-12 py-4 rounded">
+        <form onSubmit={(event)=>handleSignUp(event, userInput)} className="bg-black bg-opacity-80 shadow-lg text-white w-[26rem] mx-auto px-12 py-4 rounded">
             <h1 className="font-bold text-3xl mb-4 mt-2">Sign Up</h1>
 
 

@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
-import checkValidData from "../Utils/Validate.jsx";
-import { auth } from "../Utils/firebase.js";
+import { loginContext } from "../Context/UserContext";
 
 export default function Login(){
     const [userInput, setUserInput] = useState({
@@ -10,7 +9,8 @@ export default function Login(){
         password: "",
     });
 
-    const [errors, setErrors] = useState({});
+    const {handleSubmit, errors} = useContext(loginContext)
+
 
     function handleUserInput(event){
         const {value, name} = event.target;
@@ -21,30 +21,9 @@ export default function Login(){
         }))
     }
 
-    function checkValidations(){
-        const {emailRegex, passwordRegex} = checkValidData(userInput.email, userInput.password);
-        
-        const userErrs = {
-            emailError: emailRegex ? "" : "Enter a valid email address",
-            passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
-        }
-
-        setErrors(userErrs)
-
-        return Object.values(userErrs).every(error => error === "");
-
-    }
-
-    function handleSubmit(event){
-        event.preventDefault();
-       const isValid = checkValidations()
-    }
-
-    console.log(userInput)
-
 
     return(
-        <form onSubmit={handleSubmit} className="bg-black bg-opacity-80 shadow-lg text-white w-[26rem] mx-auto px-12 py-4 rounded">
+        <form onSubmit={(e)=>handleSubmit(e, userInput)} className="bg-black bg-opacity-80 shadow-lg text-white w-[26rem] mx-auto px-12 py-4 rounded">
             <h1 className="font-bold text-3xl mb-6 mt-2">Sign In</h1>
             <Input value={userInput.email} placeholder="Email address" name="email" onChange={handleUserInput} type="text"/>
             {errors.emailError && <p className="text-netflix-color">{errors.emailError}</p> }
@@ -54,7 +33,7 @@ export default function Login(){
             {errors.passwordErr && <p className="text-netflix-color">{errors.passwordErr}</p> }
 
 
-            <button className="w-full bg-netflix-color text-white my-9 px-4 py-3 font-semibold text-lg rounded-sm">Sign In</button>
+            <button className="w-full bg-netflix-color text-white my-9 px-4 py-3 font-semibold text-lg rounded-sm outline-none">Sign In</button>
 
             <div className="flex mb-3">
                 <p>New to Netflix?</p>
