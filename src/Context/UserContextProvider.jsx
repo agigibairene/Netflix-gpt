@@ -25,7 +25,7 @@ export default function UserContextProvider({children}){
             console.log("Hello", currentUser)
         });
 
-        return subscribe;
+        return ()=> subscribe();
     }, [])
 
 
@@ -38,7 +38,7 @@ export default function UserContextProvider({children}){
         const {emailRegex, passwordRegex, nameRegex} = checkValidData(userInput.email, userInput.password, userInput.username);
            
         const userErrs = {
-            nameError: userSignedUp && nameRegex ? "" : "Enter a valid username",
+            nameError: userSignedUp && nameRegex ? "" : userSignedUp ? "Enter a valid username" : "",
             emailError: emailRegex ? "" : "Enter a valid email address",
             passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
         }
@@ -50,44 +50,49 @@ export default function UserContextProvider({children}){
     }
    
 
-    async function handleSubmit(event, userInput){
+    async function handleSubmit(event, userInput) {
         event.preventDefault();
-        setErrors({})
+        setErrors({});
         const isValid = checkValidations(userInput, false);
-        try{
-            if (isValid){
-                await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
-                console.log("User logged in successfully")
-            }
-        }
-        catch(e){
-            console.log("Firebase Login error", e)
+    
+        if (!isValid) return;
+    
+        try {
+            await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
+            console.log("User logged in successfully");
+        } catch (e) {
+            console.error("Firebase Login error", e.message);
+            setErrors({ firebaseError: e.message }); // Capture the error
         }
     }
-
-    async function handleSignUp(event, userInput){
+    
+    async function handleSignUp(event, userInput) {
         event.preventDefault();
         setErrors({});
         const isValid = checkValidations(userInput, true);
+    
+        if (!isValid) return;
+    
         try {
-            if (isValid) {
-                const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
-                const user = userCredentials.user;
-                console.log(user);
-                console.log("User successfully created");
-                if (user && user.email && userInput.username) {
-                    await setDoc(doc(db, "Users", user.uid), {
-                        email: user.email,
-                        username: userInput.username,
-                    });
-                    console.log("User data written to Firestore successfully");
-                }
+            const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
+            const user = userCredentials.user;
+            console.log("User successfully created");
+    
+            if (user) {
+                await setDoc(doc(db, "Users", user.uid), {
+                    email: user.email,
+                    username: userInput.username,
+                });
+                console.log("User data written to Firestore successfully");
             }
-        } 
-        catch (e) {
+        } catch (e) {
             console.error("Error creating user:", e.message);
+            setErrors({ firebaseError: e.message }); // Capture error message
         }
     }
+
+    console.log(errors); 
+    
 
     const detailsLogin = {
         handleSubmit: handleSubmit,

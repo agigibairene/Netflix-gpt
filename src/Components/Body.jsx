@@ -10,7 +10,9 @@ export default function Body(){
   const navigate = useNavigate();
 
   useEffect(() =>{
-    navigate(currentUser ? "/browse" : "/");
+    if (currentUser !== null){
+      navigate(currentUser ? "/browse" : "/");
+    }
   }, [currentUser, navigate])
 
     return (
