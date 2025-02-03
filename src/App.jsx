@@ -1,13 +1,13 @@
 import Body from "./Components/Body";
-import UserContext from "./Context/UserContext";
+import UserContextProvider from "./Context/UserContextProvider";
 
 
 function App() {
 
   return (
-    <UserContext>
+    <UserContextProvider>
       <Body />
-    </UserContext>
+    </UserContextProvider>
     
   )
 }

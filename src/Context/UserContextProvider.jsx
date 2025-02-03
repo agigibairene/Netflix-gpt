@@ -1,25 +1,34 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
-import checkValidData from "../Utils/Validate";
+import { createContext, useEffect, useState } from "react";
+import checkValidData from "../Utils/Validate.jsx";
 import { auth,db } from "../Utils/firebase.js";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 
 
-export const loginContext = createContext({
+export const LoginContext = createContext({
+    currentUser: null,
     handleSubmit: ()=>{},
-    userLoggedIn : false,
     handleSignUp: ()=>{},
-    userSignedUp: false,
     errors: {}
 });
 
 
-export default function UserContext({children}){
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-    const [userSignedUp, setUserSignedUp] = useState(false);
+export default function UserContextProvider({children}){
+    const [user, setUser] = useState(null)
     const [errors, setErrors] = useState({});
+
+    useEffect(()=>{
+        const subscribe = onAuthStateChanged(auth, (currentUser)=>{
+            setUser(currentUser);
+            console.log(currentUser);
+        });
+
+        return () =>{
+            subscribe()
+        }
+    }, [])
 
 
     function checkValidations(userInput){
@@ -49,7 +58,6 @@ export default function UserContext({children}){
         try{
             if (isValid){
                 await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
-                setIsUserLoggedIn(true)
                 console.log("User logged in successfully")
             }
         }
@@ -65,7 +73,6 @@ export default function UserContext({children}){
             if (isValid) {
                 const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
                 const user = userCredentials.user;
-                setUserSignedUp(true);
                 console.log(user);
                 console.log("User successfully created");
                 if (user && user.email && userInput.username) {
@@ -84,14 +91,12 @@ export default function UserContext({children}){
 
     const detailsLogin = {
         handleSubmit: handleSubmit,
-        userLoggedIn : isUserLoggedIn,
-        userSignedUp: userSignedUp,
         handleSignUp: handleSignUp,
+        currentUser: user,
         errors: errors
     }
 
-    return <loginContext.Provider value={detailsLogin}>
+    return <LoginContext.Provider value={detailsLogin}>
         {children}
-    </loginContext.Provider>
+    </LoginContext.Provider>
 }
-

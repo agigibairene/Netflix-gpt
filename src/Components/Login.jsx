@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
-import { loginContext } from "../Context/UserContext";
+import { LoginContext } from "../Context/UserContextProvider";
 
 export default function Login(){
     const [userInput, setUserInput] = useState({
@@ -9,7 +9,7 @@ export default function Login(){
         password: "",
     });
 
-    const {handleSubmit, errors} = useContext(loginContext)
+    const {handleSubmit, errors} = useContext(LoginContext)
 
 
     function handleUserInput(event){

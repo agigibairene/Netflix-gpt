@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Input from "../Utils/Input";
 import { Link } from "react-router";
-import { loginContext } from "../Context/UserContext";
+import { LoginContext } from "../Context/UserContextProvider";
 
 export default function SignUp(){
     const [userInput, setUserInput] = useState({
@@ -10,7 +10,7 @@ export default function SignUp(){
         password: "",
     });
 
-    const {handleSignUp, errors} = useContext(loginContext);
+    const {handleSignUp, errors} = useContext(LoginContext);
 
     function handleUserInput(event){
         const {value, name} = event.target;
