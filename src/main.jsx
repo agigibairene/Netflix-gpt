@@ -8,6 +8,8 @@ import SignUp from "./Components/SignUp";
 import Login from './Components/Login.jsx';
 import Browse from './Components/Browse.jsx';
 import UserContextProvider from './Context/UserContextProvider.jsx';
+import { Provider } from 'react-redux';
+import netflixStore from './store/Redux_store.jsx';
 
 const appRouter = createBrowserRouter([
   {
@@ -23,8 +25,10 @@ const appRouter = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <UserContextProvider>
-      <RouterProvider router={appRouter} />
-    </UserContextProvider>
+   <Provider store={netflixStore}>
+      <UserContextProvider>
+        <RouterProvider router={appRouter} />
+      </UserContextProvider>
+   </Provider>
   </StrictMode>
 );

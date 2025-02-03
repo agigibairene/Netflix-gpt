@@ -31,8 +31,8 @@ export default function UserContextProvider({children}){
     }, [])
 
 
-    function checkValidations(userInput){
-        if (!userInput || !userInput.email || !userInput.password || !userInput.username) {
+    function checkValidations(userInput, userSignedUp){
+        if (!userInput || !userInput.email || !userInput.password || (userSignedUp && !userInput.username)) {
             console.error("Invalid userInput:", userInput);
             return false;
         }
@@ -40,7 +40,7 @@ export default function UserContextProvider({children}){
         const {emailRegex, passwordRegex, nameRegex} = checkValidData(userInput.email, userInput.password, userInput.username);
            
         const userErrs = {
-            nameError: nameRegex ? "" : "Enter a valid username",
+            nameError: userSignedUp && nameRegex ? "" : "Enter a valid username",
             emailError: emailRegex ? "" : "Enter a valid email address",
             passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
         }
@@ -54,7 +54,7 @@ export default function UserContextProvider({children}){
 
     async function handleSubmit(event, userInput){
         event.preventDefault();
-        const isValid = checkValidations(userInput);
+        const isValid = checkValidations(userInput, false);
         try{
             if (isValid){
                 await signInWithEmailAndPassword(auth, userInput.email, userInput.password);
@@ -68,7 +68,7 @@ export default function UserContextProvider({children}){
 
     async function handleSignUp(event, userInput){
         event.preventDefault();
-        const isValid = checkValidations(userInput);
+        const isValid = checkValidations(userInput, true);
         try {
             if (isValid) {
                 const userCredentials = await createUserWithEmailAndPassword(auth, userInput.email, userInput.password);
