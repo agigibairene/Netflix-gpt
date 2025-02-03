@@ -22,12 +22,10 @@ export default function UserContextProvider({children}){
     useEffect(()=>{
         const subscribe = onAuthStateChanged(auth, (currentUser)=>{
             setUser(currentUser);
-            console.log(currentUser);
+            console.log("Hello", currentUser)
         });
 
-        return () =>{
-            subscribe()
-        }
+        return subscribe;
     }, [])
 
 
@@ -54,6 +52,7 @@ export default function UserContextProvider({children}){
 
     async function handleSubmit(event, userInput){
         event.preventDefault();
+        setErrors({})
         const isValid = checkValidations(userInput, false);
         try{
             if (isValid){
@@ -68,6 +67,7 @@ export default function UserContextProvider({children}){
 
     async function handleSignUp(event, userInput){
         event.preventDefault();
+        setErrors({});
         const isValid = checkValidations(userInput, true);
         try {
             if (isValid) {

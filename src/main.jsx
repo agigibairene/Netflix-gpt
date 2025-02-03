@@ -17,7 +17,7 @@ const appRouter = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Login /> },
-      { path: '/signup', element: <SignUp /> },
+      { path: 'signup', element: <SignUp /> },
     ],
   },
   { path: '/browse', element: <Browse /> },
@@ -25,10 +25,10 @@ const appRouter = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <Provider store={netflixStore}>
+   {/* <Provider store={netflixStore}> */}
       <UserContextProvider>
         <RouterProvider router={appRouter} />
       </UserContextProvider>
-   </Provider>
+   {/* </Provider> */}
   </StrictMode>
 );
