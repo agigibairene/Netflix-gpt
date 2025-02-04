@@ -53,7 +53,7 @@ export default function Header() {
                 ) : (
                     <NavLink to="/">
                         <button className="text-white font-bold rounded px-4 py-2 bg-red-600">
-                            Sign In
+                            Sign Up
                         </button>
                     </NavLink>
                 )}
