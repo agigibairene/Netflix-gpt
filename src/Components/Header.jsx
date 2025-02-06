@@ -1,15 +1,38 @@
-import { useState, useContext } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import userIcon from "/user-icon.jpg";
 import Netflixlogo from "/netflix-logo.png";
-import { LoginContext } from "../Context/UserContextProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "../Utils/firebase";
+import { useDispatch } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { addUser, removeUser } from "../store/userSlice";
 
 export default function Header() {
-    const { currentUser } = useContext(LoginContext);
+    const [user, setUser] = useState(null)
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        const subscribe = onAuthStateChanged(auth, (currentUser)=>{
+            if (currentUser){
+                setUser(currentUser);
+                const  {uid, email, displayName} = currentUser;
+                dispatch(addUser({uid: uid, email: email, displayName: displayName}))
+                console.log("Hello", currentUser);
+                navigate("/browse")
+
+            }
+            else{
+                dispatch(removeUser())
+                navigate("/")
+            }
+        });
+
+
+        return ()=> subscribe();
+    }, []);
 
     async function signUserOut(){
         try{
@@ -29,7 +52,7 @@ export default function Header() {
                 <img className="w-52" src={Netflixlogo} alt="Netflix Logo" />
 
                 {/* User Icon with Dropdown */}
-                {currentUser ? (
+                {user ? (
                     <div className="relative">
                         <img
                             src={userIcon}
@@ -47,6 +70,7 @@ export default function Header() {
                                 >
                                     Sign Out
                                 </button>
+                                <p>{}</p>
                             </div>
                         )}
                     </div>

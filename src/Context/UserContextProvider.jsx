@@ -1,13 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import checkValidData from "../Utils/Validate.jsx";
 import { auth,db } from "../Utils/firebase.js";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-import { useDispatch } from "react-redux";
-import { addUser, removeUser } from "../store/userSlice.jsx";
-import { useNavigate } from "react-router-dom";
+
 
 
 export const LoginContext = createContext({
@@ -19,27 +17,8 @@ export const LoginContext = createContext({
 
 
 export default function UserContextProvider({children}){
-    const [user, setUser] = useState(null)
     const [errors, setErrors] = useState({});
-    const dispatch = useDispatch();
 
-    useEffect(()=>{
-        const subscribe = onAuthStateChanged(auth, (currentUser)=>{
-            if (currentUser){
-                setUser(currentUser);
-                const  {uid, email, displayName} = currentUser;
-                dispatch(addUser({uid: uid, email: email, displayName: displayName}))
-                console.log("Hello", currentUser)
-            }
-            else{
-                dispatch(removeUser())
-               
-            }
-        });
-
-
-        return ()=> subscribe();
-    }, [])
 
 
     function checkValidations(userInput, userSignedUp){
@@ -110,7 +89,6 @@ export default function UserContextProvider({children}){
     const detailsLogin = {
         handleSubmit: handleSubmit,
         handleSignUp: handleSignUp,
-        currentUser: user,
         errors: errors
     }
 
