@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
 import Header from "./Header";
-import { API_OPTIONS } from "../Utils/constants";
+import useFetchMovies from "../hooks/useFetchMovies";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 export default function Browse(){
-    const [movies, setMovies] = useState();
-
-    const url = 'https://api.themoviedb.org/3/movie/now_playing?page=1';
-    const fetchMovies = async () =>{
-        const response = await fetch(url, API_OPTIONS);
-        const data = await response.json();
-        setMovies(data.results)
-    }
-
-    useEffect(()=>{
-        fetchMovies();
-    }, []);
-
-    console.log(movies);
+    useFetchMovies();
 
     return(
         <section>
             <Header />
+            <MainContainer />
+            <SecondaryContainer />
         </section>
     )
 }
