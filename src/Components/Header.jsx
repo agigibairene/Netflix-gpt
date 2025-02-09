@@ -20,7 +20,6 @@ export default function Header() {
                 setUser(currentUser);
                 const  {uid, email, displayName} = currentUser;
                 dispatch(addUser({uid: uid, email: email, displayName: displayName}))
-                console.log("Hello", currentUser);
                 navigate("/browse")
 
             }
@@ -46,7 +45,7 @@ export default function Header() {
     }
 
     return (
-        <header className="p-4 bg-gradient-to-b from-black z-10">
+        <header className="bg-gradient-to-b from-black z-10">
             <nav className="flex items-center justify-between px-16">
                 {/* Netflix Logo */}
                 <img className="w-52" src={Netflixlogo} alt="Netflix Logo" />

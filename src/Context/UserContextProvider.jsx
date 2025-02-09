@@ -83,7 +83,6 @@ export default function UserContextProvider({children}){
         }
     }
 
-    console.log(errors); 
     
 
     const detailsLogin = {

@@ -9,11 +9,8 @@ export default function MainContainer(){
     const thumbnail = movies[0];
     const {id} = thumbnail
 
-    console.log(thumbnail);
-    console.log(id);
-
     return(
-        <section className="px-16 pt-12">
+        <section className="">
             <VideoTitle thumbnail={thumbnail}/>
             <VideoBackground movie_id={id}/>
         </section>

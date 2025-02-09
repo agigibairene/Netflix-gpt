@@ -7,7 +7,7 @@ export default function Browse(){
     useFetchMovies();
 
     return(
-        <section>
+        <section className="">
             <Header />
             <MainContainer />
             <SecondaryContainer />
