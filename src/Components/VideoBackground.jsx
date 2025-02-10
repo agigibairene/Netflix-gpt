@@ -2,6 +2,7 @@
 import { useSelector  } from "react-redux";
 import {  addTrailerVideo } from "../store/movieSlice";
 import { useFetchData } from "../hooks/useFetchData";
+import ReactPlayer from "react-player";
 
 export default function VideoBackground({movie_id}){
     const trailerVideo = useSelector(state => state.movies?.trailerVideo);
@@ -12,16 +13,16 @@ export default function VideoBackground({movie_id}){
     return(
         <div className="w-full overflow-hidden top-0 left-0 z-0 min-h">
         {trailerVideo ? (
-             <iframe
+             <ReactPlayer 
+             url={`https://www.youtube.com/watch?v=${trailerVideo?.key}`} 
+             playing 
+             muted 
+             controls={false} 
+             width="100%" 
+             height="100%"
              className="w-screen aspect-video"
-             src={
-               "https://www.youtube.com/embed/" +
-               trailerVideo?.key +
-               "?&autoplay=1&mute=1"
-             }
-             title="YouTube video player"
-             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-           ></iframe>
+          />
+           
         
         ) : (
             <h1 className="text-white text-center text-2xl">No Video Available</h1>
