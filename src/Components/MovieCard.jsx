@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
+
 export default function MovieCard({imagePath}){
-    let path; 
+
     const imgUrl = `https://image.tmdb.org/t/p/w500/${imagePath}`
     return(
         <div>
