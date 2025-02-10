@@ -1,81 +1,73 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import userIcon from "/user-icon.jpg";
-import Netflixlogo from "/netflix-logo.png";
-import { signOut } from "firebase/auth";
-import { auth } from "../Utils/firebase";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../Utils/firebase";
 import { addUser, removeUser } from "../store/userSlice";
+import Netflixlogo from "/netflix-logo.png";
+import userIcon from "/user-icon.jpg";
 
 export default function Header() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        const subscribe = onAuthStateChanged(auth, (currentUser)=>{
-            if (currentUser){
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
                 setUser(currentUser);
-                const  {uid, email, displayName} = currentUser;
-                dispatch(addUser({uid: uid, email: email, displayName: displayName}))
-                navigate("/browse")
-
-            }
-            else{
-                dispatch(removeUser())
-                navigate("/")
+                const { uid, email, displayName } = currentUser;
+                dispatch(addUser({ uid, email, displayName }));
+                navigate("/browse");
+            } else {
+                dispatch(removeUser());
+                navigate("/");
             }
         });
 
+        return () => unsubscribe();
+    }, [dispatch, navigate]);
 
-        return ()=> subscribe();
-    }, []);
-
-    async function signUserOut(){
-        try{
+    async function signUserOut() {
+        try {
             await signOut(auth);
             setDropdownOpen(false);
             navigate("/");
-        }
-        catch(error){
+        } catch (error) {
             console.error("Error signing out:", error);
         }
     }
 
     return (
-        <header className="bg-gradient-to-b from-black z-10">
-            <nav className="flex items-center justify-between px-16">
+        <header className="bg-gradient-to-b from-black fixed w-full z-20">
+            <nav className="flex items-center justify-between px-10 py-4">
                 {/* Netflix Logo */}
-                <img className="w-52" src={Netflixlogo} alt="Netflix Logo" />
+                <img className="w-36" src={Netflixlogo} alt="Netflix Logo" />
 
-                {/* User Icon with Dropdown */}
+                {/* User Profile Section */}
                 {user ? (
                     <div className="relative">
                         <img
                             src={userIcon}
-                            className="w-12 h-12 cursor-pointer"
-                            alt="User Icon"
+                            className="w-10 h-10 cursor-pointer"
+                            alt="User Avatar"
                             onClick={() => setDropdownOpen(!isDropdownOpen)}
                         />
-                        
-                        {/* Dropdown Menu */}
                         {isDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-32 bg-gray-800 text-white rounded shadow-lg">
+                            <div className="absolute right-0 mt-2 w-40 bg-gray-900 text-white rounded-lg shadow-lg">
                                 <button 
-                                    className="block w-full px-4 py-2 text-left hover:bg-red-600"
+                                    className="block w-full px-4 py-2 hover:bg-red-600 text-left"
                                     onClick={signUserOut}
                                 >
                                     Sign Out
                                 </button>
-                                <p>{}</p>
                             </div>
                         )}
                     </div>
                 ) : (
                     <NavLink to="/">
-                        <button className="text-white font-bold rounded px-4 py-2 bg-red-600">
+                        <button className="text-white font-semibold px-5 py-2 bg-red-600 rounded-md hover:bg-red-700">
                             Sign Up
                         </button>
                     </NavLink>
