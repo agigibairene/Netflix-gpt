@@ -6,7 +6,7 @@ export default function SecondaryContainer(){
     // Popular, NowPlaying, Trending, Horror
     
     return(
-        <section>
+        <section className="">
             <MovieList  title="Trending" movies={movies.nowPlayingMovies} />
         </section>
     )
