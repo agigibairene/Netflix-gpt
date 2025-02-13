@@ -4,16 +4,14 @@ import { API_OPTIONS } from "../Utils/constants";
 import { useDispatch } from "react-redux";
 
 
-export default function useFetchMovies(){
+export default function useFetchMovies(url, reduxAction){
     const dispatch = useDispatch();
 
-
-    const url = 'https://api.themoviedb.org/3/movie/now_playing?page=1';
 
     const fetchMovies = async () =>{
         const response = await fetch(url, API_OPTIONS);
         const data = await response.json();
-        dispatch(addNowPlayingMovies(data.results));
+        dispatch(reduxAction(data.results));
     }
 
     useEffect(()=>{
