@@ -2,15 +2,15 @@
 import MovieCard from "./MovieCard";
 
 export default function MovieList({title, movies}){
-
+    console.log(movies);
     return(
-        <section className="p-6 ">
-            <h1 className="text-3xl py-6">{title}</h1>
-            <div className="flex overflow-x-scroll">
-                <div className="flex ">
+        <section className="px-6 py-4 bg-black">
+            <h1 className="text-4xl text-white py-4 font-bold">{title}</h1>
+            <div className="flex overflow-x-scroll no-scrollbar">
+                <div className="flex">
                     {
-                        movies && movies.map(movie =>
-                            <MovieCard imagePath={movie.poster_path} key={movie.id}/>
+                        movies && movies?.map(movie =>
+                            <MovieCard imagePath={movie.poster_path} title={movie.title} key={movie.id}/>
                         )
                     }
                 </div>

@@ -6,8 +6,12 @@ export default function SecondaryContainer(){
     // Popular, NowPlaying, Trending, Horror
     
     return(
-        <section className="">
-            <MovieList  title="Trending" movies={movies.nowPlayingMovies} />
-        </section>
+        movies.nowPlayingMovies &&( <section className="-mt-40 z-30 relative">
+            <MovieList  title="Trending Movies" movies={movies.nowPlayingMovies} />
+            <MovieList  title="Now Playing Movies" movies={movies.nowPlayingMovies} />
+            <MovieList  title="Popular Movies" movies={movies.nowPlayingMovies} />
+            <MovieList  title="Upcoming Movies" movies={movies.nowPlayingMovies} />
+            <MovieList  title="Top Rated TV Shows" movies={movies.nowPlayingMovies} />
+        </section>)
     )
 }
