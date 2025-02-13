@@ -9,18 +9,22 @@ export default function SecondaryContainer(){
         upcoming: state.movies.upcomingMovies
     }), shallowEqual);
 
-    console.log("TRENDING",movies);
-    console.log("POPULAR",popular);
-    // Popular, NowPlaying, Trending, Horror
+    const movieList = [
+        {title: "Now Playing Movies", movie: movies},
+        {title: "Popular Movies", movie: popular},
+        {title: "Upcoming Movies", movie: upcoming},
+        {title: "Top Rated TV Shows", movie: topRated},
+    ];
     
     return(
         movies && popular &&( <section className="bg-black">
             <div className="-mt-64 z-30 relative">
-                {/* <MovieList  title="Trending Movies" movies={movies.nowPlayingMovies} /> */}
-                <MovieList  title="Now Playing Movies" movies={movies} />
-                <MovieList  title="Popular Movies" movies={popular} />
-                <MovieList  title="Upcoming Movies" movies={upcoming} />
-                <MovieList  title="Top Rated TV Shows" movies={topRated} />
+                {
+                    movieList.map(movieItem =>{
+                        const { title, movie } = movieItem;
+                       return <MovieList title={title} movies={movie} key={title}/>   
+                    })
+                }
             </div>
         </section>)
     )
