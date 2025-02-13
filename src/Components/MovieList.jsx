@@ -4,7 +4,7 @@ import MovieCard from "./MovieCard";
 export default function MovieList({title, movies}){
     console.log(movies);
     return(
-        <section className="px-6 py-4 bg-black">
+        <section className="px-10 py-4 bg-black">
             <h1 className="text-4xl text-white py-4 font-bold">{title}</h1>
             <div className="flex overflow-x-scroll no-scrollbar">
                 <div className="flex">
