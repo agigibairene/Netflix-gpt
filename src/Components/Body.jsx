@@ -4,6 +4,8 @@ import { LoginContext } from "../Context/UserContextProvider";
 import Browse from "./Browse";
 import Home from "./Home";
 
+
+
 export default function Body(){
 
   const { currentUser } = useContext(LoginContext);

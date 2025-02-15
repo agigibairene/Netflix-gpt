@@ -3,8 +3,12 @@ import useFetchMovies from "../hooks/useFetchMovies";
 import MainContainer from "./MainContainer";
 import SecondaryContainer from "./SecondaryContainer";
 import { addNowPlayingMovies, addPopularMovies, addTopRatedMovies, addUpcomingMovies } from "../store/movieSlice";
+import { useSelector } from "react-redux";
+import SearchPage from "./SearchPage";
 
 export default function Browse(){
+    const showGptSearch = useSelector(state => state.gpt.showGptSearch)
+
     const nowPlayingUrl = 'https://api.themoviedb.org/3/movie/now_playing?page=1';
     const popularMovies = "https://api.themoviedb.org/3/movie/popular";
     const topRated = "https://api.themoviedb.org/3/movie/top_rated";
@@ -16,10 +20,20 @@ export default function Browse(){
     useFetchMovies(upcoming, addUpcomingMovies);
 
     return(
-        <section className="">
-            <Header />
-            <MainContainer />
-            <SecondaryContainer />
+        <section className={`${showGptSearch ? "bg-bgImage min-h-screen bg-cover bg-center relative": ""}`}>
+           { showGptSearch && <div className="absolute inset-0 bg-black bg-opacity-50"></div>}
+            <main className={`${showGptSearch ? "relative flex min-h-screen justify-center": ""}`}>
+                <Header />
+                {
+                    showGptSearch ? <SearchPage /> : ( 
+                        <>
+                            <MainContainer />
+                            <SecondaryContainer />
+                        </>
+                    )
+                }
+            </main>
+           
         </section>
     )
 }
