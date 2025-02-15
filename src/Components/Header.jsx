@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
@@ -6,12 +6,17 @@ import { auth } from "../Utils/firebase";
 import { addUser, removeUser } from "../store/userSlice";
 import Netflixlogo from "/netflix-logo.png";
 import userIcon from "/user-icon.jpg";
+import { LoginContext } from "../Context/UserContextProvider";
+
 
 export default function Header() {
     const [user, setUser] = useState(null);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isActive, setIsActive] = useState(false);
+    const {showSearchPage, handleSearchFn} = useContext(LoginContext);
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -39,15 +44,26 @@ export default function Header() {
         }
     }
 
+    useEffect(() => {
+        const handleScroll = () =>{
+            setIsActive(window.scrollY > 50)
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
         <header className="bg-gradient-to-b from-black fixed w-full z-20">
-            <nav className="flex items-center justify-between px-10 py-4">
-                {/* Netflix Logo */}
+            <nav className={`flex items-center justify-between px-10 py-4 ${isActive ? "bg-bg-Hcolor" : "" }`}>
                 <img className="w-36" src={Netflixlogo} alt="Netflix Logo" />
-
-                {/* User Profile Section */}
+g
                 {user ? (
-                    <div className="relative">
+                    <div className="flex gap-10">
+                        <button onClick={handleSearchFn} className="px-3 py-2 bg-purple-500 text-white font-bold rounded-lg">
+                            { showSearchPage ? "GPT Search" : "Home"}
+                        </button>
+                        <div className="relative">
                         <img
                             src={userIcon}
                             className="w-10 h-10 cursor-pointer"
@@ -64,6 +80,8 @@ export default function Header() {
                                 </button>
                             </div>
                         )}
+                    </div>
+                    
                     </div>
                 ) : (
                     <NavLink to="/">

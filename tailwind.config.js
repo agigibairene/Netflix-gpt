@@ -10,7 +10,8 @@ export default {
         "netflix-color": "#E50914",
       },
       backgroundImage: {
-        "bgImage": 'url("/background-img.jpg")'
+        "bgImage": 'url("/background-img.jpg")',
+        "bg-Hcolor": "hsl(0, 0%, 98%)",
       }
     },
   },
