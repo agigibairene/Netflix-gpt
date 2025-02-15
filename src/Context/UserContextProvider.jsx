@@ -13,14 +13,11 @@ export const LoginContext = createContext({
     handleSubmit: ()=>{},
     handleSignUp: ()=>{},
     errors: {},
-    showSearchPage: null,
-    handleSearchFn: ()=>{},
 });
 
 
 export default function UserContextProvider({children}){
     const [errors, setErrors] = useState({});
-    const [search, setSearch] = useState(true);
 
 
     function checkValidations(userInput, userSignedUp){
@@ -85,17 +82,12 @@ export default function UserContextProvider({children}){
         }
     }
 
-    function handleSearchPage(){
-        setSearch(prevState => !prevState);
-    }
     
 
     const detailsLogin = {
         handleSubmit: handleSubmit,
         handleSignUp: handleSignUp,
         errors: errors,
-        showSearchPage: search,
-        handleSearchFn: handleSearchPage,
     }
 
     return <LoginContext.Provider value={detailsLogin}>

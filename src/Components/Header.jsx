@@ -1,13 +1,12 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Utils/firebase";
 import { addUser, removeUser } from "../store/userSlice";
 import Netflixlogo from "/netflix-logo.png";
 import userIcon from "/user-icon.jpg";
-import { LoginContext } from "../Context/UserContextProvider";
-
+import { toggleGptSearchView } from "../store/gptSlice";
 
 export default function Header() {
     const [user, setUser] = useState(null);
@@ -15,8 +14,7 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isActive, setIsActive] = useState(false);
-    const {showSearchPage, handleSearchFn} = useContext(LoginContext);
-
+    const showGptSearch = useSelector(state=>state.gpt.showGptSearch); 
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -57,11 +55,11 @@ export default function Header() {
         <header className="bg-gradient-to-b from-black fixed w-full z-20">
             <nav className={`flex items-center justify-between px-10 py-4 ${isActive ? "bg-bg-Hcolor" : "" }`}>
                 <img className="w-36" src={Netflixlogo} alt="Netflix Logo" />
-g
+
                 {user ? (
                     <div className="flex gap-10">
-                        <button onClick={handleSearchFn} className="px-3 py-2 bg-purple-500 text-white font-bold rounded-lg">
-                            { showSearchPage ? "GPT Search" : "Home"}
+                        <button onClick={()=>dispatch(toggleGptSearchView())} className="px-3 py-2 bg-purple-500 text-white font-bold rounded-lg">
+                            { showGptSearch ? "Home": "GPT Search"}
                         </button>
                         <div className="relative">
                         <img
