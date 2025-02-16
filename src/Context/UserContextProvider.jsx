@@ -12,6 +12,7 @@ export const LoginContext = createContext({
     currentUser: null,
     handleSubmit: ()=>{},
     handleSignUp: ()=>{},
+    clearErrors: ()=>{},
     errors: {},
 });
 
@@ -19,26 +20,38 @@ export const LoginContext = createContext({
 export default function UserContextProvider({children}){
     const [errors, setErrors] = useState({});
 
+    function clearErrors() {
+        setErrors({});
+    }
 
-    function checkValidations(userInput, userSignedUp){
+    function checkValidations(userInput, userSignedUp) {
+        const userErrs = {
+            nameError: userSignedUp && !userInput.username ? "Enter a valid username" : "",
+            emailError: !userInput.email ? "Enter a valid email address" : "",
+            passwordErr: !userInput.password ? "Password is required" : "",
+        };
+    
+        // Log invalid input if any field is missing
         if (!userInput || !userInput.email || !userInput.password || (userSignedUp && !userInput.username)) {
             console.error("Invalid userInput:", userInput);
+            setErrors(userErrs);
             return false;
         }
-
-        const {emailRegex, passwordRegex, nameRegex} = checkValidData(userInput.email, userInput.password, userInput.username);
-           
-        const userErrs = {
-            nameError: userSignedUp && nameRegex ? "" : userSignedUp ? "Enter a valid username" : "",
-            emailError: emailRegex ? "" : "Enter a valid email address",
-            passwordErr: passwordRegex ? "" : "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
-        }
-   
-        setErrors(userErrs)
-   
-        return Object.values(userErrs).every(error => error === "");
-   
+    
+        // Validate with regex if fields are present
+        const { emailRegex, passwordRegex, nameRegex } = checkValidData(userInput.email, userInput.password, userInput.username);
+    
+        userErrs.nameError = userSignedUp && !nameRegex ? "Enter a valid username" : "";
+        userErrs.emailError = !emailRegex ? "Enter a valid email address" : "";
+        userErrs.passwordErr = userSignedUp ? (!passwordRegex ? "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character." : "")
+        : (!passwordRegex ? "Wrong password" : ""),
+    
+        setErrors(userErrs);
+    
+        // Return true only if there are no errors
+        return Object.values(userErrs).every((error) => error === "");
     }
+    
    
 
     async function handleSubmit(event, userInput) {
@@ -53,7 +66,10 @@ export default function UserContextProvider({children}){
             console.log("User logged in successfully");
         } catch (e) {
             console.error("Firebase Login error", e.message);
-            setErrors({ firebaseError: e.message }); // Capture the error
+            setErrors(prevErrors =>({
+                ...prevErrors,
+                firebaseError: e.message
+            })); // Capture the error
         }
     }
     
@@ -78,7 +94,10 @@ export default function UserContextProvider({children}){
             }
         } catch (e) {
             console.error("Error creating user:", e.message);
-            setErrors({ firebaseError: e.message }); // Capture error message
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                firebaseError: e.message 
+            })); // Capture error message
         }
     }
 
@@ -88,6 +107,7 @@ export default function UserContextProvider({children}){
         handleSubmit: handleSubmit,
         handleSignUp: handleSignUp,
         errors: errors,
+        clearErrors: clearErrors,
     }
 
     return <LoginContext.Provider value={detailsLogin}>

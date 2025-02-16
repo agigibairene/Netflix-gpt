@@ -8,6 +8,7 @@ import Netflixlogo from "/netflix-logo.png";
 import userIcon from "/user-icon.jpg";
 import { toggleGptSearchView } from "../store/gptSlice";
 import { languages } from "../Utils/constants";
+import { changeLanguage } from "../store/configSlice";
 
 export default function Header() {
     const [user, setUser] = useState(null);
@@ -59,12 +60,14 @@ export default function Header() {
 
                 {user ? (
                     <div className="flex gap-10 items-center">
-                      <select className="bg-gray-900 text-white p-2 m-2 rounded-lg">
+                      <select className="bg-gray-900 text-white p-2 m-2 rounded-lg" onChange={(e)=>dispatch(changeLanguage(e.target.value))}>
                         {
                             languages.map(lang =>{
                                 const {identifier, name} = lang;
                                 return(
-                                    <option key={identifier} value={identifier}>{name}</option>
+                                    <option key={identifier} value={identifier}>
+                                        {name}
+                                    </option>
                                 )
                             })
                         }
