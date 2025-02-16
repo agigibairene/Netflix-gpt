@@ -7,6 +7,7 @@ import { addUser, removeUser } from "../store/userSlice";
 import Netflixlogo from "/netflix-logo.png";
 import userIcon from "/user-icon.jpg";
 import { toggleGptSearchView } from "../store/gptSlice";
+import { languages } from "../Utils/constants";
 
 export default function Header() {
     const [user, setUser] = useState(null);
@@ -57,7 +58,17 @@ export default function Header() {
                 <img className="w-36" src={Netflixlogo} alt="Netflix Logo" />
 
                 {user ? (
-                    <div className="flex gap-10">
+                    <div className="flex gap-10 items-center">
+                      <select className="bg-gray-900 text-white p-2 m-2 rounded-lg">
+                        {
+                            languages.map(lang =>{
+                                const {identifier, name} = lang;
+                                return(
+                                    <option key={identifier} value={identifier}>{name}</option>
+                                )
+                            })
+                        }
+                      </select>
                         <button onClick={()=>dispatch(toggleGptSearchView())} className="px-3 py-2 bg-purple-500 text-white font-bold rounded-lg">
                             { showGptSearch ? "Home": "GPT Search"}
                         </button>

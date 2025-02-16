@@ -5,3 +5,8 @@ export const API_OPTIONS = {
       Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
     }
 };
+
+export const languages = [
+  {identifier: "en", name: "English",},
+  {identifier: "fr", name: "French",},
+]
