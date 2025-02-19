@@ -26,7 +26,8 @@ export default function SearchPage(){
         messages: [{role: 'user', content: gptQuery}],
         });
 
-        console.log('Chat:', chatResponse.choices[0].message.content);
+        const gptMovies = chatResponse.choices[0]?.message.content.split(",");
+        console.log(gptMovies);
     }
     
 
