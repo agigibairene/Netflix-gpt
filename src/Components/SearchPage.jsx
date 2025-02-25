@@ -1,15 +1,17 @@
 import { useEffect, useRef } from "react";
 import GptMovieSuggestions from "./GptMovieSuggestions";
 import lang from "../Utils/languageConstants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Mistral } from '@mistralai/mistralai';
 import { API_OPTIONS } from "../Utils/constants";
+import { addGptMovieResults } from "../store/gptSlice";
 
 
 
 export default function SearchPage(){
     const searchText = useRef();
     const chosenLang = useSelector(state=>state.config.lang);
+    const dispatch = useDispatch();
 
     const fetchMovies = async (movie) =>{
         try{
@@ -48,7 +50,8 @@ export default function SearchPage(){
 
         const moviesArr = mistralMovies.map(movie => fetchMovies(movie));
         const moviesResults = await Promise.all(moviesArr);
-        console.log(moviesResults)
+        // console.log(moviesResults)
+        dispatch(addGptMovieResults({movieNames: mistralMovies, gptMovies: moviesResults}));
     }
     
 
