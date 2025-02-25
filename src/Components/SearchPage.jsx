@@ -1,9 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import GptMovieSuggestions from "./GptMovieSuggestions";
 import lang from "../Utils/languageConstants";
 import { useSelector } from "react-redux";
 import { Mistral } from '@mistralai/mistralai';
-
+import { API_OPTIONS } from "../Utils/constants";
 
 
 
@@ -11,23 +11,44 @@ export default function SearchPage(){
     const searchText = useRef();
     const chosenLang = useSelector(state=>state.config.lang);
 
+    const fetchMovies = async (movie) =>{
+        try{
+            const url = `https://api.themoviedb.org/3/search/movie?query=${movie}&include_adult=false&language=en-US&page=1`;
+            const response = await fetch(url, API_OPTIONS);
+            const data = await response.json();
+            return data.results;
+        }
+        catch (err) {
+            console.error(err);
+        }
+
+    };
+
+    useEffect(() => {
+        fetchMovies();
+    }, []);
+
 
     async function handleGpt(){
         const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
         const client = new Mistral({apiKey: apiKey});
-        const gptQuery =
+        const aiQuery =
         "Act as a Movie Recommendation system and suggest some movies for the query: " +
         searchText.current.value +
-        ". Only give me names of 5 movies, comma separated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
+        ". Only give me at most 5 movies names and at least 3 , comma separated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
 
         const chatResponse = await client.chat.complete({
         model: 'mistral-large-latest',
-        messages: [{role: 'user', content: gptQuery}],
+        messages: [{role: 'user', content: aiQuery}],
         });
 
-        const gptMovies = chatResponse.choices[0]?.message.content.split(",");
-        console.log(gptMovies);
+        const mistralMovies = chatResponse.choices[0]?.message.content.split(",");
+        console.log(mistralMovies);
+
+        const moviesArr = mistralMovies.map(movie => fetchMovies(movie));
+        const moviesResults = await Promise.all(moviesArr);
+        console.log(moviesResults)
     }
     
 
