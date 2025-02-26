@@ -26,7 +26,6 @@ export default function Browse() {
             }`}
         >
             {showGptSearch && <div className="absolute inset-0 bg-black bg-opacity-50"></div>}
-            {/* Sticky Header */}
             <Header />
 
             <main className={`${showGptSearch ? "relative flex min-h-screen justify-center" : ""}`}>

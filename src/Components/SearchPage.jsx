@@ -26,9 +26,9 @@ export default function SearchPage(){
 
     };
 
-    useEffect(() => {
-        fetchMovies();
-    }, []);
+    // useEffect(() => {
+    //     fetchMovies();
+    // }, []);
 
 
     async function handleGpt(){
@@ -57,8 +57,8 @@ export default function SearchPage(){
 
 
     return(
-        <div className="flex">
-            <form onSubmit={(e)=>e.preventDefault()} className="flex items-center gap-4 ">
+        <div className="flex flex-col justify-between gap-28 items-center mt-36 pb-20">
+            <form onSubmit={(e)=>e.preventDefault()} className="flex items-center gap-4 top-96">
                 <input
                     type="GPT search"
                     className="w-[350px] bg-white outline-none border-0 px-6 py-3 rounded-lg"
