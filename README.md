@@ -9,10 +9,10 @@ A similar site to Netflix (Netflix + GPT) that utilizes the Mistral AI to help u
 
 
 ## Prerequisites
-[Node JS installed](https://nodejs.org/en/download)
-[Firebase account and create a project](https://firebase.google.com/)
-[Mistral AI account](https://console.mistral.ai/home)
-[TMDB account](https://www.themoviedb.org/)
+1. [Node JS installed](https://nodejs.org/en/download)
+2. [Firebase account and create a project](https://firebase.google.com/)
+3. [Mistral AI account](https://console.mistral.ai/home)
+4. [TMDB account](https://www.themoviedb.org/)
 
 
 
