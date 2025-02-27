@@ -11,7 +11,7 @@ export default function VideoBackground({movie_id}){
     useFetchData(url,addTrailerVideo)
    
     return(
-        <div className="w-full overflow-hidden top-0 left-0 z-0 min-h">
+        <div className="w-screen overflow-hidden top-0 left-0 z-0">
         {trailerVideo ? (
              <ReactPlayer 
              url={`https://www.youtube.com/watch?v=${trailerVideo?.key}`} 

@@ -54,9 +54,9 @@ export default function Header() {
     }, []);
 
     return (
-        <header className="bg-gradient-to-b from-black fixed w-full z-20">
+        <header className="bg-gradient-to-b from-black fixed w-full z-20 overflow-hidden">
             <nav className={`flex items-center justify-between px-10 py-4 ${isActive ? "bg-bg-Hcolor" : "" }`}>
-                <img className="w-36" src={Netflixlogo} alt="Netflix Logo" />
+                <img className="w-24 sm:w-36" src={Netflixlogo} alt="Netflix Logo" />
 
                 {user ? (
                     <div className="flex gap-10 items-center">
@@ -72,13 +72,15 @@ export default function Header() {
                             })
                         }
                       </select>
-                        <button onClick={()=>dispatch(toggleGptSearchView())} className="px-3 py-2 bg-purple-500 text-white font-bold rounded-lg">
+                        <button onClick={()=>dispatch(toggleGptSearchView())} 
+                            className="px-3 py-1 sm:py-2 bg-purple-500 text-white font-bold text-sm md:text-lg rounded-lg"
+                        >
                             { showGptSearch ? "Home": "GPT Search"}
                         </button>
                         <div className="relative">
                         <img
                             src={userIcon}
-                            className="w-10 h-10 cursor-pointer"
+                            className="w-7 sm:w-10 h-7 sm:h-10 cursor-pointer"
                             alt="User Avatar"
                             onClick={() => setDropdownOpen(!isDropdownOpen)}
                         />

@@ -57,15 +57,19 @@ export default function SearchPage(){
 
 
     return(
-        <div className="flex flex-col justify-between gap-28 items-center mt-36 pb-20">
-            <form onSubmit={(e)=>e.preventDefault()} className="flex items-center gap-4 top-96">
+        <div className="flex flex-col  justify-between gap-28 items-center mt-36 pb-20 overflow-hidden px-4">
+            <form onSubmit={(e)=>e.preventDefault()} className="flex flex-col md:flex-row items-center gap-4 top-96  px-2">
                 <input
                     type="GPT search"
                     className="w-[350px] bg-white outline-none border-0 px-6 py-3 rounded-lg"
                     placeholder={lang[chosenLang]?.placeholder}
                     ref={searchText}
                 />
-                <button onClick={handleGpt} className="bg-netflix-color text-white px-4 py-3 font-semibold rounded outline-none">{lang[chosenLang]?.search}</button>
+                <button onClick={handleGpt} 
+                    className="bg-netflix-color text-white px-4 py-3  font-semibold rounded outline-none w-full sm:w-[100px]"
+                >
+                    {lang[chosenLang]?.search}
+                </button>
             </form>
 
             <GptMovieSuggestions />

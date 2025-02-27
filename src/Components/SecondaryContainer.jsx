@@ -18,7 +18,7 @@ export default function SecondaryContainer(){
     
     return(
         movies && popular &&( <section className="bg-black">
-            <div className="-mt-64 z-30 relative">
+            <div className="mt-0  lg:-mt-64 z-30 relative">
                 {
                     movieList.map(movieItem =>{
                         const { title, movie } = movieItem;
