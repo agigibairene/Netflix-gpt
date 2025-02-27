@@ -22,8 +22,9 @@ A similar site to Netflix (Netflix + GPT) that utilizes the Mistral AI to help u
        - React + vite
        - Tailwind css (A CSS framework for styling)
     2. Backend: 
-       - ChatGPT API (For user queries and recommending matching movies searched)
+       - Mistral API (For user queries and recommending matching movies searched)
        - Firebase (For Authentication)
+       - Movie Data from TMDB
 ```
 
 
